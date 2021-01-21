@@ -3,9 +3,11 @@ Install the [kube-prometheus-stack](https://github.com/prometheus-operator/kube-
 
 ## Example
 ``` hcl
-module scaling {
+module "prometheus" {
   source        = "git::https://github.com/provectus/swiss-prometheus.git"
-  cluster_name  = "testing"
+  cluster_name      = module.kubernetes.cluster_name
+  argocd            = module.argocd.state
+  domains           = local.domain
 }
 ```
 
