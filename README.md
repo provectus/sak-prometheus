@@ -4,7 +4,7 @@ Install the [kube-prometheus-stack](https://github.com/prometheus-operator/kube-
 ## Example
 ``` hcl
 module "prometheus" {
-  source        = "git::https://github.com/provectus/swiss-prometheus.git"
+  source        = "git::https://github.com/provectus/sak-prometheus.git"
   cluster_name      = module.kubernetes.cluster_name
   argocd            = module.argocd.state
   domains           = local.domain
