@@ -149,6 +149,9 @@ locals {
     "grafana.adminPassword"                           = local.argocd_enabled > 0 ? "KMS_ENC:${aws_kms_ciphertext.grafana_password[0].ciphertext_blob}:" : local.password
     "grafana.env.GF_AUTH_GOOGLE_ENABLED"              = var.grafana_google_auth
     "grafana.env.GF_AUTH_GOOGLE_ALLOWED_DOMAINS"      = var.grafana_allowed_domains
+    "grafana.env.GF_AUTH_GOOGLE_CLIENT_ID"            = var.grafana_client_id
+    //TODO: Change to work with secret
+    "grafana.env.GF_AUTH_GOOGLE_CLIENT_SECRET"        = var.grafana_client_secret
     "prometheus.enabled"                              = true
     "prometheus.ingress.enabled"                      = false
     "namespace"                                       = local.namespace
