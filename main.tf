@@ -86,7 +86,7 @@ resource "local_file" "grafana_auth" {
       "name"      = "grafana-auth"
       "namespace" = local.namespace
     }
-    "data" = {
+    "stringData" = {
       "GF_AUTH_GOOGLE_CLIENT_ID"     = var.grafana_client_id
       "GF_AUTH_GOOGLE_CLIENT_SECRET" = "KMS_ENC:${aws_kms_ciphertext.grafana_client_secret[0].ciphertext_blob}:"
     }
