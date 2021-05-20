@@ -34,7 +34,7 @@ resource "kubernetes_secret" "grafana_auth" {
     var.module_depends_on
   ]
 
-  count = var.grafana_google_auth == true ? 1 - local.argocd_enabled : 0
+  count = var.grafana_google_auth ? 1 - local.argocd_enabled : 0
 
   metadata {
     name      = "grafana-auth"
@@ -48,7 +48,7 @@ resource "kubernetes_secret" "grafana_auth" {
 }
 
 resource "aws_kms_ciphertext" "grafana_client_secret" {
-  count     = var.grafana_google_auth == true && local.argocd_enabled > 0 ? 1 : 0
+  count     = var.grafana_google_auth && local.argocd_enabled > 0 ? 1 : 0
   key_id    = var.argocd.kms_key_id
   plaintext = base64encode(var.grafana_client_secret)
 }
@@ -75,7 +75,7 @@ resource "local_file" "namespace" {
 }
 
 resource "local_file" "grafana_auth" {
-  count = var.grafana_google_auth == true ? local.argocd_enabled : 0
+  count = var.grafana_google_auth ? local.argocd_enabled : 0
   depends_on = [
     var.module_depends_on
   ]
@@ -140,7 +140,7 @@ locals {
   chart      = "kube-prometheus-stack"
   conf       = merge(local.conf_defaults, var.conf)
   password   = var.grafana_password == "" ? random_password.grafana_password.result : var.grafana_password
-  conf_defaults = {
+  conf_defaults = { 
     "alertmanager.enabled"       = true
     "grafana.enabled"            = true
     "grafana.pvc.enabled"        = true
