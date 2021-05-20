@@ -43,7 +43,7 @@ variable "domains" {
 variable "chart_version" {
   type        = string
   description = "A Helm Chart version"
-  default     = "12.8.0"
+  default     = "16.0.0"
 }
 
 variable "tags" {
