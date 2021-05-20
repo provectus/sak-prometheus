@@ -147,8 +147,8 @@ locals {
     "grafana.ingress.enabled"                         = true
     "grafana.ingress.hosts[0]"                        = "grafana.${var.domains[0]}"
     "grafana.adminPassword"                           = local.argocd_enabled > 0 ? "KMS_ENC:${aws_kms_ciphertext.grafana_password[0].ciphertext_blob}:" : local.password
-    "grafana.grafana.ini.auth.google.enabled"         = var.grafana_google_auth
-    "grafana.grafana.ini.auth.google.allowed.domains" = var.grafana_allowed_domains
+    "grafana.env.GF_AUTH_GOOGLE_ENABLED"              = var.grafana_google_auth
+    "grafana.env.GF_AUTH_GOOGLE_ALLOWED_DOMAINS"      = var.grafana_allowed_domains
     "prometheus.enabled"                              = true
     "prometheus.ingress.enabled"                      = false
     "namespace"                                       = local.namespace
