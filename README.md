@@ -29,6 +29,9 @@ module "prometheus" {
 Optional parameters
 ```
   namespace               = "moniroting" # Set namespace to install all charts
+  thanos_enabled          = true # Enable install thanos application
+  grafana_enabled         = true # Enable install prometheus application
+  prometheus_enabled      = true # Enable install grafana application
   thanos_storage          = "s3" # Object storage backend. 
   thanos_password         = "password" # Use as minio secret if thanos_storage = "minio"
   grafana_password        = "password" # Set grafana admin password, autogenerate and store to paramstore if empty

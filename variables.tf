@@ -4,6 +4,24 @@ variable "argocd" {
   default     = {}
 }
 
+variable "prometheus_enabled" {
+  type        = bool
+  description = "Enable install prometheus"
+  default     = true
+}
+
+variable "thanos_enabled" {
+  type        = bool
+  description = "Enable install thanos"
+  default     = true
+}
+
+variable "grafana_enabled" {
+  type        = bool
+  description = "Enable install grafana"
+  default     = true
+}
+
 variable "grafana_conf" {
   type        = map(string)
   description = "A custom configuration for deployment"

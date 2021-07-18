@@ -5,9 +5,12 @@ data "aws_eks_cluster" "this" {
 data "aws_region" "current" {}
 
 locals {
-  argocd_enabled = length(var.argocd) > 0 ? 1 : 0
-  storage        = var.thanos_storage == "s3" ? 0 : 1
-  namespace      = coalescelist(var.namespace == "" && local.argocd_enabled > 0 ? [{ "metadata" = [{ "name" = var.namespace_name }] }] : kubernetes_namespace.this, [{ "metadata" = [{ "name" = var.namespace }] }])[0].metadata[0].name
+  argocd_enabled     = length(var.argocd) > 0 ? 1 : 0
+  grafana_enabled    = var.grafana_enabled ? 1 : 0
+  prometheus_enabled = var.prometheus_enabled ? 1 : 0
+  thanos_enabled     = var.thanos_enabled ? 1 : 0
+  storage            = var.thanos_storage == "s3" ? 0 : 1
+  namespace          = coalescelist(var.namespace == "" && local.argocd_enabled > 0 ? [{ "metadata" = [{ "name" = var.namespace_name }] }] : kubernetes_namespace.this, [{ "metadata" = [{ "name" = var.namespace }] }])[0].metadata[0].name
 }
 
 module "iam_assumable_role_admin" {
@@ -148,7 +151,7 @@ resource "local_file" "grafana_auth" {
 }
 
 resource "helm_release" "grafana" {
-  count = 1 - local.argocd_enabled
+  count = local.grafana_enabled > 0 ? 1 - local.argocd_enabled : 0
 
   name          = local.grafana_name
   repository    = local.grafana_repository
@@ -169,7 +172,7 @@ resource "helm_release" "grafana" {
 }
 
 resource "helm_release" "prometheus" {
-  count = 1 - local.argocd_enabled
+  count = local.prometheus_enabled > 0 ? 1 - local.argocd_enabled : 0
 
   name          = local.prometheus_name
   repository    = local.prometheus_repository
@@ -190,7 +193,7 @@ resource "helm_release" "prometheus" {
 }
 
 resource "helm_release" "thanos" {
-  count = 1 - local.argocd_enabled
+  count = local.thanos_enabled > 0 ? 1 - local.argocd_enabled : 0
 
   name          = local.thanos_name
   repository    = local.thanos_repository
@@ -211,19 +214,19 @@ resource "helm_release" "thanos" {
 }
 
 resource "local_file" "grafana" {
-  count    = local.argocd_enabled
+  count    = local.grafana_enabled
   content  = yamlencode(local.grafana_application)
   filename = "${path.root}/${var.argocd.path}/${local.grafana_name}.yaml"
 }
 
 resource "local_file" "prometheus" {
-  count    = local.argocd_enabled
+  count    = local.prometheus_enabled
   content  = yamlencode(local.prometheus_application)
   filename = "${path.root}/${var.argocd.path}/${local.prometheus_name}.yaml"
 }
 
 resource "local_file" "thanos" {
-  count    = local.argocd_enabled
+  count    = local.thanos_enabled
   content  = yamlencode(local.thanos_application)
   filename = "${path.root}/${var.argocd.path}/${local.thanos_name}.yaml"
 }
@@ -467,7 +470,7 @@ locals {
     "minio.secretKey.password"          = local.thanos_password
     "existingObjstoreSecret"            = local.storage > 0 ? kubernetes_secret.thanos_objstore[0].metadata.0.name : kubernetes_secret.s3_objstore[0].metadata.0.name
     "namespace"                         = local.namespace
-    "existingServiceAccount"            = local.thanos_name
+    "existingServiceAccount"            = local.thanos_name # TODO: disable if local.prometheus_enabled = 0 
   }
   thanos_application = {
     "apiVersion" = "argoproj.io/v1alpha1"
