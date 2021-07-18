@@ -70,6 +70,7 @@ No requirements.
 | grafana\_client\_id | The id of the client for Grafana Google auth | `string` | `""` | no |
 | grafana\_client\_secret | The token of the client for Grafana Google auth | `string` | `""` | no |
 | grafana\_conf | A custom configuration for deployment | `map(string)` | `{}` | no |
+| grafana\_enabled | Enable install grafana | `bool` | `true` | no |
 | grafana\_google\_auth | Enables Google auth for Grafana | `string` | `false` | no |
 | grafana\_password | Password for grafana admin | `string` | `""` | no |
 | module\_depends\_on | A list of explicit dependencies | `list(any)` | `[]` | no |
@@ -77,9 +78,11 @@ No requirements.
 | namespace\_name | A name of namespace for creating | `string` | `"monitoring"` | no |
 | prometheus\_chart\_version | A Prometheus Chart version | `string` | `"6.1.1"` | no |
 | prometheus\_conf | A custom configuration for deployment | `map(string)` | `{}` | no |
+| prometheus\_enabled | Enable install prometheus | `bool` | `true` | no |
 | tags | A tags for attaching to new created AWS resources | `map(string)` | `{}` | no |
 | thanos\_chart\_version | A Thanos Chart version | `string` | `"5.1.0"` | no |
 | thanos\_conf | A custom configuration for deployment | `map(string)` | `{}` | no |
+| thanos\_enabled | Enable install thanos | `bool` | `true` | no |
 | thanos\_password | Password for thanos objstorage if thanos\_storage minio | `string` | `""` | no |
 | thanos\_storage | The type of thanos object storage backend | `string` | `"s3"` | no |
 
