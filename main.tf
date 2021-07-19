@@ -42,8 +42,8 @@ resource "aws_iam_policy" "thanos" {
             "s3:DeleteBucket"
           ],
           Resource = [
-            "arn:aws:s3:::*/*", #TODO: Change to ${aws_s3_bucket.thanos[0].id} or hardcoded name
-            "arn:aws:s3:::*"
+            local.storage == "s3" ? "arn:aws:s3:::${aws_s3_bucket.thanos[0].id}/*" : null,
+            local.storage == "s3" ? "arn:aws:s3:::${aws_s3_bucket.thanos[0].id}" : null
           ]
         }
       ]
@@ -108,7 +108,7 @@ resource "aws_kms_ciphertext" "grafana_password" {
 }
 
 resource "aws_kms_ciphertext" "thanos_password" {
-  count     = 1 - local.storage
+  count     = local.storage
   key_id    = var.argocd.kms_key_id
   plaintext = local.thanos_password
 }
