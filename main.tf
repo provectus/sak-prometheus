@@ -108,7 +108,7 @@ resource "aws_kms_ciphertext" "grafana_password" {
 }
 
 resource "aws_kms_ciphertext" "thanos_password" {
-  count     = local.storage
+  count     = local.argocd_enabled
   key_id    = var.argocd.kms_key_id
   plaintext = local.thanos_password
 }
@@ -117,7 +117,7 @@ resource "aws_s3_bucket" "thanos" {
   count  = 1 - local.storage
   bucket = "${var.cluster_name}-thanos"
   acl    = "private"
-
+# TODO: Add force destroy method
   tags = var.tags
 }
 
@@ -467,7 +467,7 @@ locals {
     "metrics.enabled"                   = "true"
     "minio.enabled"                     = local.storage > 0 ? "true" : "false"
     "minio.accessKey.password"          = "thanosStorage"
-    "minio.secretKey.password"          = local.argocd_enabled > 0 ? "KMS_ENC:${aws_kms_ciphertext.thanos_password[0].ciphertext_blob}:" : local.thanos_password
+    "minio.secretKey.password"          = local.storage > 0 ? "" : "KMS_ENC:${aws_kms_ciphertext.thanos_password[0].ciphertext_blob}:"
     "existingObjstoreSecret"            = local.storage > 0 ? kubernetes_secret.thanos_objstore[0].metadata.0.name : kubernetes_secret.s3_objstore[0].metadata.0.name
     "namespace"                         = local.namespace
     "existingServiceAccount"            = local.thanos_name # TODO: disable if local.prometheus_enabled = 0 
