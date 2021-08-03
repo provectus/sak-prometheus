@@ -467,7 +467,7 @@ locals {
     "metrics.enabled"                   = "true"
     "minio.enabled"                     = local.storage > 0 ? "true" : "false"
     "minio.accessKey.password"          = "thanosStorage"
-    "minio.secretKey.password"          = local.storage > 0 ? "" : "KMS_ENC:${aws_kms_ciphertext.thanos_password[0].ciphertext_blob}:"
+    "minio.secretKey.password"          = local.storage > 0 ? "KMS_ENC:${aws_kms_ciphertext.thanos_password[0].ciphertext_blob}:" : ""
     "existingObjstoreSecret"            = local.storage > 0 ? kubernetes_secret.thanos_objstore[0].metadata.0.name : kubernetes_secret.s3_objstore[0].metadata.0.name
     "namespace"                         = local.namespace
     "existingServiceAccount"            = local.thanos_name # TODO: disable if local.prometheus_enabled = 0 
