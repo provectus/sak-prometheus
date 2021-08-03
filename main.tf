@@ -41,10 +41,7 @@ resource "aws_iam_policy" "thanos" {
             "s3:CreateBucket",
             "s3:DeleteBucket"
           ],
-          Resource = [
-            local.storage == "s3" ? "arn:aws:s3:::${aws_s3_bucket.thanos[0].id}/*" : null,
-            local.storage == "s3" ? "arn:aws:s3:::${aws_s3_bucket.thanos[0].id}" : null
-          ]
+          local.storage == "s3" ? Resource = ["arn:aws:s3:::${aws_s3_bucket.thanos[0].id}/*", "arn:aws:s3:::${aws_s3_bucket.thanos[0].id}"] : Resource = [],
         }
       ]
     }
@@ -77,7 +74,7 @@ resource "aws_ssm_parameter" "thanos_password" {
 }
 
 resource "kubernetes_namespace" "this" {
-  count = var.namespace == "" ? 1 - local.argocd_enabled : 0
+  count = var.namespace == "" ? 1 : 0
   metadata {
     name = var.namespace_name
   }
@@ -119,18 +116,6 @@ resource "aws_s3_bucket" "thanos" {
   acl    = "private"
 
   tags = var.tags
-}
-
-resource "local_file" "namespace" {
-  count = local.argocd_enabled
-  content = yamlencode({
-    "apiVersion" = "v1"
-    "kind"       = "Namespace"
-    "metadata" = {
-      "name" = local.namespace
-    }
-  })
-  filename = "${path.root}/${var.argocd.path}/ns-${local.namespace}.yaml"
 }
 
 resource "local_file" "grafana_auth" {
