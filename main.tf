@@ -41,7 +41,7 @@ resource "aws_iam_policy" "thanos" {
             "s3:CreateBucket",
             "s3:DeleteBucket"
           ],
-          local.storage == "s3" ? Resource = ["arn:aws:s3:::${aws_s3_bucket.thanos[0].id}/*", "arn:aws:s3:::${aws_s3_bucket.thanos[0].id}"] : Resource = [],
+          local.storage == "s3" ? "Resource = [\"arn:aws:s3:::${aws_s3_bucket.thanos[0].id}/*\", \"arn:aws:s3:::${aws_s3_bucket.thanos[0].id}\"]" : "Resource = []",
         }
       ]
     }
