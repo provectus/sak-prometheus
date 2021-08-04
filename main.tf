@@ -10,8 +10,8 @@ locals {
   prometheus_enabled = var.prometheus_enabled ? 1 : 0
   thanos_enabled     = var.thanos_enabled ? 1 : 0
   storage            = var.thanos_storage == "s3" ? 0 : 1
-  namespace          = coalescelist(var.namespace == "" && local.argocd_enabled > 0 ? [{ "metadata" = [{ "name" = var.namespace_name }] }] : kubernetes_namespace.this, [{ "metadata" = [{ "name" = var.namespace }] }])[0].metadata[0].name
-  policy_resource    = local.storage == 0 ? "Resource = [\"arn:aws:s3:::${aws_s3_bucket.thanos[0].id}/*\", \"arn:aws:s3:::${aws_s3_bucket.thanos[0].id}\"]" : "Resource = []"
+  namespace          = var.namespace == "" ? var.namespace_name : var.namespace
+  policy_resource    = local.storage == 0 ? "[\"arn:aws:s3:::${aws_s3_bucket.thanos[0].id}/*\", \"arn:aws:s3:::${aws_s3_bucket.thanos[0].id}\"]" : "[]"
 }
 
 module "iam_assumable_role_admin" {
@@ -42,7 +42,7 @@ resource "aws_iam_policy" "thanos" {
             "s3:CreateBucket",
             "s3:DeleteBucket"
           ],
-          local.policy_resource,
+          Resource = local.policy_resource
         }
       ]
     }
