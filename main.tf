@@ -11,7 +11,6 @@ locals {
   thanos_enabled     = var.thanos_enabled ? 1 : 0
   storage            = var.thanos_storage == "s3" ? 0 : 1
   namespace          = var.namespace == "" ? var.namespace_name : var.namespace
-  policy_resource    = local.storage == 0 ? "[\"arn:aws:s3:::${aws_s3_bucket.thanos[0].id}/*\", \"arn:aws:s3:::${aws_s3_bucket.thanos[0].id}\"]" : "[]"
 }
 
 module "iam_assumable_role_admin" {
@@ -42,7 +41,11 @@ resource "aws_iam_policy" "thanos" {
             "s3:CreateBucket",
             "s3:DeleteBucket"
           ],
-          Resource = local.policy_resource
+          Resource = [
+            "arn:aws:s3:::${aws_s3_bucket.thanos.id}",
+            "arn:aws:s3:::${aws_s3_bucket.thanos.id}/*"
+            
+          ]
         }
       ]
     }
@@ -112,7 +115,6 @@ resource "aws_kms_ciphertext" "thanos_password" {
 }
 
 resource "aws_s3_bucket" "thanos" {
-  count  = 1 - local.storage
   bucket = "${var.cluster_name}-thanos"
   acl    = "private"
 
