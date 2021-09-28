@@ -5,9 +5,9 @@ This module can install Prometheus Grafana Thanos.
 ## How to change infrastructure
 
  * New namespace will be create (by default name "monitoring")
- * New 3 application for ArgoCD (grafana, prometheus, thanos) 
+ * New 3 application for ArgoCD (grafana, prometheus, thanos)
  * New ingress and dns records will be create (thanos.domain.name, grafana.domain.name). You can disable create ingress if provide additional config (grafana_conf = {ingress.enabled = false} and thanos_conf = {queryFrontend.ingress.enabled = false}
- * By default, thanos backend will be create s3 bucket "<domain_name>-thanos and IAM policy. 
+ * By default, thanos backend will be create s3 bucket "<domain_name>-thanos and IAM policy.
 ## Prometheus
 Install the [kube-prometheus](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus), de-facto standard for monitoring.
 ## Grafana
@@ -32,7 +32,7 @@ Optional parameters
   thanos_enabled          = true # Enable install thanos application
   grafana_enabled         = true # Enable install prometheus application
   prometheus_enabled      = true # Enable install grafana application
-  thanos_storage          = "s3" # Object storage backend. 
+  thanos_storage          = "s3" # Object storage backend.
   thanos_password         = "password" # Use as minio secret if thanos_storage = "minio"
   grafana_password        = "password" # Set grafana admin password, autogenerate and store to paramstore if empty
   grafana_google_auth     = true
@@ -46,17 +46,17 @@ Optional parameters
 
 ## Requirements
 
-No requirements.
+``` terraform >= 0.15 ```
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
-| helm | n/a |
-| kubernetes | n/a |
-| local | n/a |
-| random | n/a |
+| aws | >= 3.0 |
+| helm | >= 1.0 |
+| kubernetes | >= 1.11 |
+| local | >= 2.1.0 |
+| random | >= 3.1.0 |
 
 ## Inputs
 
@@ -91,4 +91,3 @@ No requirements.
 | Name | Description |
 |------|-------------|
 | path\_to\_grafana\_password | A SystemManager ParemeterStore key with Grafana admin password |
-
