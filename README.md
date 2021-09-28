@@ -46,7 +46,9 @@ Optional parameters
 
 ## Requirements
 
-``` terraform >= 0.15 ```
+```
+terraform >= 0.15
+ ```
 
 ## Providers
 
