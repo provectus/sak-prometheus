@@ -44,7 +44,7 @@ resource "aws_iam_policy" "thanos" {
           Resource = [
             "arn:aws:s3:::${aws_s3_bucket.thanos.id}",
             "arn:aws:s3:::${aws_s3_bucket.thanos.id}/*"
-            
+
           ]
         }
       ]
@@ -272,7 +272,7 @@ locals {
   grafana_chart      = "grafana"
   grafana_conf       = merge(local.grafana_conf_defaults, var.grafana_conf)
   grafana_password   = var.grafana_password == "" ? random_password.grafana_password.result : var.grafana_password
-  # TODO: add ingress annotations config sections 
+  # TODO: add ingress annotations config sections
   grafana_values = yamlencode(
     {
       "datasources.yaml" = {
@@ -312,7 +312,7 @@ locals {
     "env.GF_AUTH_GOOGLE_ENABLED"         = var.grafana_google_auth
     "env.GF_AUTH_GOOGLE_ALLOWED_DOMAINS" = var.grafana_allowed_domains
     "env.GF_AUTH_GOOGLE_CLIENT_ID"       = var.grafana_client_id
-    //TODO: Change to work with secret
+    #//TODO: Change to work with secret
     "env.GF_AUTH_GOOGLE_CLIENT_SECRET" = var.grafana_client_secret
     "namespace"                        = local.namespace
   }
@@ -359,7 +359,7 @@ locals {
   prometheus_chart      = "kube-prometheus"
   prometheus_conf       = merge(local.prometheus_conf_defaults, var.prometheus_conf)
 
-  # TODO: add ingress annotations config sections 
+  # TODO: add ingress annotations config sections
   prometheus_conf_defaults = {
     "alertmanager.enabled"                                                 = true
     "operator.enabled"                                                     = true
@@ -432,7 +432,7 @@ locals {
   thanos_conf_defaults = {
     "query.sdConfig" = yamlencode(
       [{
-        "targets" = ["kube-prometheus-prometheus-thanos:10901"] //Change to variables (merge default with var)
+        "targets" = ["kube-prometheus-prometheus-thanos:10901"] #//Change to variables (merge default with var)
       }]
     )
     "query.enabled"                     = "true"
@@ -458,7 +458,7 @@ locals {
     "minio.secretKey.password"          = local.storage > 0 ? "KMS_ENC:${aws_kms_ciphertext.thanos_password[0].ciphertext_blob}:" : ""
     "existingObjstoreSecret"            = local.storage > 0 ? kubernetes_secret.thanos_objstore[0].metadata.0.name : kubernetes_secret.s3_objstore[0].metadata.0.name
     "namespace"                         = local.namespace
-    "existingServiceAccount"            = local.thanos_name # TODO: disable if local.prometheus_enabled = 0 
+    "existingServiceAccount"            = local.thanos_name # TODO: disable if local.prometheus_enabled = 0
   }
   thanos_application = {
     "apiVersion" = "argoproj.io/v1alpha1"

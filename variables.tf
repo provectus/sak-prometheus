@@ -52,12 +52,6 @@ variable "namespace_name" {
   description = "A name of namespace for creating"
 }
 
-variable "module_depends_on" {
-  default     = []
-  type        = list(any)
-  description = "A list of explicit dependencies"
-}
-
 variable "cluster_name" {
   type        = string
   default     = null
