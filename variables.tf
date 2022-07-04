@@ -67,19 +67,19 @@ variable "domains" {
 variable "grafana_chart_version" {
   type        = string
   description = "A Grafana Chart version"
-  default     = "6.13.9"
+  default     = "6.32.0"
 }
 
 variable "prometheus_chart_version" {
   type        = string
   description = "A Prometheus Chart version"
-  default     = "6.1.1"
+  default     = "8.0.9"
 }
 
 variable "thanos_chart_version" {
   type        = string
   description = "A Thanos Chart version"
-  default     = "5.1.0"
+  default     = "10.5.4"
 }
 
 variable "tags" {
