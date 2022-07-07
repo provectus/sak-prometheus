@@ -1,13 +1,17 @@
 # About this module
 
-This module can install Prometheus Grafana Thanos.
+This module can install:
+### Prometheus: [Documentation](https://prometheus.io/docs/introduction/overview/)  
+### Grafana: [Documentation](https://grafana.com/docs/)  
+### Thanos. [Documentation](https://thanos.io/tip/thanos/getting-started.md/)  
 
 ## How to change infrastructure
 
- * New namespace will be create (by default name "monitoring")
- * New 3 application for ArgoCD (grafana, prometheus, thanos)
- * New ingress and dns records will be create (thanos.domain.name, grafana.domain.name). You can disable create ingress if provide additional config (grafana_conf = {ingress.enabled = false} and thanos_conf = {queryFrontend.ingress.enabled = false}
- * By default, thanos backend will be create s3 bucket "<domain_name>-thanos and IAM policy.
+ * New namespace will be created (by default name "monitoring")
+ * New 3 applications for ArgoCD (grafana, prometheus, thanos)
+ * New ingress and dns records will be created (thanos.domain.name, grafana.domain.name). You can disable ingress if provide additional config (grafana_conf = {ingress.enabled = false} and thanos_conf = {queryFrontend.ingress.enabled = false}
+ * If ingress is disabled, you can test locally by port-forwarding (example: kubectl port-forward grafana-pod 3000:3000)
+ * By default, thanos backend will create s3 bucket "<domain_name>-thanos and IAM policy.
 ## Prometheus
 Install the [kube-prometheus](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus), de-facto standard for monitoring.
 ## Grafana
