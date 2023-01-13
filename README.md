@@ -23,7 +23,7 @@ Install the [thanos](https://github.com/bitnami/charts/tree/master/bitnami/thano
 module "prometheus" {
   depends_on      = [module.argocd]
   source          = "github.com/provectus/sak-prometheus"
-  cluster_name    = module.kubernetes.cluster_name
+  cluster_name    = module.eks.cluster_id
   argocd          = module.argocd.state
   domains         = local.domain
   tags            = local.tags
