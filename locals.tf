@@ -113,7 +113,7 @@ locals {
     "prometheus.thanos.ingress.hosts[0]"                                   = "thanos-gateway.${var.domains[0]}"
     "prometheus.thanos.ingress.tls[0].secretName"                          = "thanos-gateway-local-tls"
     "prometheus.thanos.ingress.tls[0].hosts[0]"                            = "thanos-gateway.${var.domains[0]}"
-    "prometheus.thanos.objectStorageConfig.secretName"                     = local.storage > 0 ? kubernetes_secret.thanos_objstore[0].metadata.0.name : kubernetes_secret.s3_objstore[0].metadata.0.name
+    "prometheus.thanos.objectStorageConfig.secretName"                     = local.storage > 0 ? kubernetes_secret.thanos_objstore[0].metadata[0].name : kubernetes_secret.s3_objstore[0].metadata[0].name
     "prometheus.thanos.objectStorageConfig.secretKey"                      = "objstore.yml"
     "prometheus.serviceAccount.name"                                       = local.thanos_name
     "prometheus.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn" = module.iam_assumable_role_admin.this_iam_role_arn
@@ -192,7 +192,7 @@ locals {
     "minio.enabled"                     = local.storage > 0 ? "true" : "false"
     "minio.accessKey.password"          = "thanosStorage"
     "minio.secretKey.password"          = local.storage > 0 ? "KMS_ENC:${aws_kms_ciphertext.thanos_password[0].ciphertext_blob}:" : ""
-    "existingObjstoreSecret"            = local.storage > 0 ? kubernetes_secret.thanos_objstore[0].metadata.0.name : kubernetes_secret.s3_objstore[0].metadata.0.name
+    "existingObjstoreSecret"            = local.storage > 0 ? kubernetes_secret.thanos_objstore[0].metadata[0].name : kubernetes_secret.s3_objstore[0].metadata[0].name
     "namespace"                         = local.namespace
     "existingServiceAccount"            = local.thanos_name # TODO: disable if local.prometheus_enabled = 0
   }
