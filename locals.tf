@@ -82,6 +82,9 @@ locals {
           "prune"    = true
           "selfHeal" = true
         }
+        "syncOptions" = {
+          "createNamespace" = true
+        }
       }
     }
   }
@@ -147,12 +150,12 @@ locals {
         }
       }
       "syncPolicy" = {
-        "syncOptions": [
-        "Replace=true"
-      ],
         "automated" = {
           "prune"    = true
           "selfHeal" = true
+        }
+        "syncOptions" = {
+          "createNamespace" = true
         }
       }
     }
@@ -227,6 +230,9 @@ locals {
         "automated" = {
           "prune"    = true
           "selfHeal" = true
+        }
+        "syncOptions" = {
+          "createNamespace" = true
         }
       }
     }
