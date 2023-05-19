@@ -77,13 +77,6 @@ resource "aws_ssm_parameter" "thanos_password" {
   value = local.thanos_password
 }
 
-resource "kubernetes_namespace" "this" {
-  count = var.namespace == "" ? 1 : 0
-  metadata {
-    name = var.namespace_name
-  }
-}
-
 resource "kubernetes_secret" "grafana_auth" {
   count = var.grafana_google_auth ? 1 - local.argocd_enabled : 0
   metadata {
@@ -224,8 +217,7 @@ resource "local_file" "thanos" {
 }
 
 resource "kubernetes_secret" "thanos_objstore" {
-  count      = local.storage
-  depends_on = [kubernetes_namespace.this]
+  count = local.storage
   metadata {
     name      = "thanos-objstore-config"
     namespace = local.namespace
@@ -248,8 +240,7 @@ config:
 }
 
 resource "kubernetes_secret" "s3_objstore" {
-  count      = 1 - local.storage
-  depends_on = [kubernetes_namespace.this]
+  count = 1 - local.storage
   metadata {
     name      = "thanos-objstore-config"
     namespace = local.namespace
