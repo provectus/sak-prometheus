@@ -1,4 +1,5 @@
 # About this module
+
 This module is part of Swiss Army Kube project. Check out main repo below and contributing guide.
 
 **[Swiss Army Kube](https://github.com/provectus/swiss-army-kube)**
@@ -6,25 +7,36 @@ This module is part of Swiss Army Kube project. Check out main repo below and co
 **[Contributing Guide](https://github.com/provectus/swiss-army-kube/blob/master/CONTRIBUTING.md)**
 
 This module can install:
-### Prometheus: [Documentation](https://prometheus.io/docs/introduction/overview/)  
-### Grafana: [Documentation](https://grafana.com/docs/)  
-### Thanos. [Documentation](https://thanos.io/tip/thanos/getting-started.md/)  
+
+### Prometheus: [Documentation](https://prometheus.io/docs/introduction/overview/)
+
+### Grafana: [Documentation](https://grafana.com/docs/)
+
+### Thanos. [Documentation](https://thanos.io/tip/thanos/getting-started.md/)
 
 ## How to change infrastructure
 
- * New namespace will be created (by default name "monitoring")
- * New 3 applications for ArgoCD (grafana, prometheus, thanos)
- * New ingress and dns records will be created (thanos.domain.name, grafana.domain.name). You can disable ingress if provide additional config (grafana_conf = {ingress.enabled = false} and thanos_conf = {queryFrontend.ingress.enabled = false}
- * If ingress is disabled, you can test locally by port-forwarding (example: kubectl port-forward grafana-pod 3000:3000)
- * By default, thanos backend will create s3 bucket "<domain_name>-thanos and IAM policy.
+- New namespace will be created (by default name "monitoring")
+- New 3 applications for ArgoCD (grafana, prometheus, thanos)
+- New ingress and dns records will be created (thanos.domain.name, grafana.domain.name). You can disable ingress if provide additional config (grafana_conf = {ingress.enabled = false} and thanos_conf = {queryFrontend.ingress.enabled = false}
+- If ingress is disabled, you can test locally by port-forwarding (example: kubectl port-forward grafana-pod 3000:3000)
+- By default, thanos backend will create s3 bucket "<domain_name>-thanos and IAM policy.
+
 ## Prometheus
+
 Install the [kube-prometheus](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus), de-facto standard for monitoring.
+
 ## Grafana
+
 Install the [grafana](https://github.com/grafana/helm-charts/tree/main/charts/grafana), web dashboarding system
+
 ## Thanos
+
 Install the [thanos](https://github.com/bitnami/charts/tree/master/bitnami/thanos), long term storage capabilities for prometheus
+
 ## Example
-``` hcl
+
+```hcl
 module "prometheus" {
   depends_on      = [module.argocd]
   source          = "github.com/provectus/sak-prometheus"
@@ -36,6 +48,7 @@ module "prometheus" {
 ```
 
 Optional parameters
+
 ```
   namespace               = "moniroting" # Set namespace to install all charts
   thanos_enabled          = true # Enable install thanos application
@@ -57,48 +70,48 @@ Optional parameters
 
 ```
 terraform >= 1.1
- ```
+```
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| aws | >= 3.0 |
-| helm | >= 1.0 |
-| kubernetes | >= 1.11 |
-| local | >= 2.1.0 |
-| random | >= 3.1.0 |
+| Name       | Version  |
+| ---------- | -------- |
+| aws        | >= 3.0   |
+| helm       | >= 1.0   |
+| kubernetes | >= 1.11  |
+| local      | >= 2.1.0 |
+| random     | >= 3.1.0 |
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| argocd | A set of values for enabling deployment through ArgoCD | `map(string)` | `{}` | no |
-| cluster\_name | A name of the Amazon EKS cluster | `string` | `null` | no |
-| domains | A list of domains to use for ingresses | `list(string)` | <pre>[<br>  "local"<br>]</pre> | no |
-| grafana\_allowed\_domains | Allowed domain for Grafana Google auth | `string` | `"local"` | no |
-| grafana\_chart\_version | A Grafana Chart version | `string` | `"6.13.9"` | no |
-| grafana\_client\_id | The id of the client for Grafana Google auth | `string` | `""` | no |
-| grafana\_client\_secret | The token of the client for Grafana Google auth | `string` | `""` | no |
-| grafana\_conf | A custom configuration for deployment | `map(string)` | `{}` | no |
-| grafana\_enabled | Enable install grafana | `bool` | `true` | no |
-| grafana\_google\_auth | Enables Google auth for Grafana | `string` | `false` | no |
-| grafana\_password | Password for grafana admin | `string` | `""` | no |
-| module\_depends\_on | A list of explicit dependencies | `list(any)` | `[]` | no |
-| namespace | A name of the existing namespace | `string` | `""` | no |
-| namespace\_name | A name of namespace for creating | `string` | `"monitoring"` | no |
-| prometheus\_chart\_version | A Prometheus Chart version | `string` | `"6.1.1"` | no |
-| prometheus\_conf | A custom configuration for deployment | `map(string)` | `{}` | no |
-| prometheus\_enabled | Enable install prometheus | `bool` | `true` | no |
-| tags | A tags for attaching to new created AWS resources | `map(string)` | `{}` | no |
-| thanos\_chart\_version | A Thanos Chart version | `string` | `"5.1.0"` | no |
-| thanos\_conf | A custom configuration for deployment | `map(string)` | `{}` | no |
-| thanos\_enabled | Enable install thanos | `bool` | `true` | no |
-| thanos\_password | Password for thanos objstorage if thanos\_storage minio | `string` | `""` | no |
-| thanos\_storage | The type of thanos object storage backend | `string` | `"s3"` | no |
+| Name                     | Description                                            | Type           | Default                       | Required |
+| ------------------------ | ------------------------------------------------------ | -------------- | ----------------------------- | :------: |
+| argocd                   | A set of values for enabling deployment through ArgoCD | `map(string)`  | `{}`                          |    no    |
+| cluster_name             | A name of the Amazon EKS cluster                       | `string`       | `null`                        |    no    |
+| domains                  | A list of domains to use for ingresses                 | `list(string)` | <pre>[<br> "local"<br>]</pre> |    no    |
+| grafana_allowed_domains  | Allowed domain for Grafana Google auth                 | `string`       | `"local"`                     |    no    |
+| grafana_chart_version    | A Grafana Chart version                                | `string`       | `"6.13.9"`                    |    no    |
+| grafana_client_id        | The id of the client for Grafana Google auth           | `string`       | `""`                          |    no    |
+| grafana_client_secret    | The token of the client for Grafana Google auth        | `string`       | `""`                          |    no    |
+| grafana_conf             | A custom configuration for deployment                  | `map(string)`  | `{}`                          |    no    |
+| grafana_enabled          | Enable install grafana                                 | `bool`         | `true`                        |    no    |
+| grafana_google_auth      | Enables Google auth for Grafana                        | `string`       | `false`                       |    no    |
+| grafana_password         | Password for grafana admin                             | `string`       | `""`                          |    no    |
+| module_depends_on        | A list of explicit dependencies                        | `list(any)`    | `[]`                          |    no    |
+| namespace                | A name of the existing namespace                       | `string`       | `""`                          |    no    |
+| namespace_name           | A name of namespace for creating                       | `string`       | `"monitoring"`                |    no    |
+| prometheus_chart_version | A Prometheus Chart version                             | `string`       | `"6.1.1"`                     |    no    |
+| prometheus_conf          | A custom configuration for deployment                  | `map(string)`  | `{}`                          |    no    |
+| prometheus_enabled       | Enable install prometheus                              | `bool`         | `true`                        |    no    |
+| tags                     | A tags for attaching to new created AWS resources      | `map(string)`  | `{}`                          |    no    |
+| thanos_chart_version     | A Thanos Chart version                                 | `string`       | `"5.1.0"`                     |    no    |
+| thanos_conf              | A custom configuration for deployment                  | `map(string)`  | `{}`                          |    no    |
+| thanos_enabled           | Enable install thanos                                  | `bool`         | `true`                        |    no    |
+| thanos_password          | Password for thanos objstorage if thanos_storage minio | `string`       | `""`                          |    no    |
+| thanos_storage           | The type of thanos object storage backend              | `string`       | `"s3"`                        |    no    |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| path\_to\_grafana\_password | A SystemManager ParemeterStore key with Grafana admin password |
+| Name                     | Description                                                    |
+| ------------------------ | -------------------------------------------------------------- |
+| path_to_grafana_password | A SystemManager ParemeterStore key with Grafana admin password |
