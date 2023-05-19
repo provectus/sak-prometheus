@@ -1,4 +1,9 @@
 # About this module
+This module is part of Swiss Army Kube project. Check out main repo below and contributing guide.
+
+**[Swiss Army Kube](https://github.com/provectus/swiss-army-kube)**
+|
+**[Contributing Guide](https://github.com/provectus/swiss-army-kube/blob/master/CONTRIBUTING.md)**
 
 This module can install:
 ### Prometheus: [Documentation](https://prometheus.io/docs/introduction/overview/)  
